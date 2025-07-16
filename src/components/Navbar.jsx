@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { FaBars, FaTimes, FaUserCircle } from "react-icons/fa";
 import Logo from "../assets/Logo.png"
-// import { AuthContext } from "../../Provider/AuthProvider";
 import { AuthContext } from "../Provider/AuthProvider";
 import { toast } from "react-toastify";
 
@@ -79,26 +78,25 @@ const Navbar = () => {
                 {/* Right Actions */}
                 <div className="hidden md:flex items-center space-x-4 relative">
                     {user ? (
-                        <div className="relative">
-                            <img
-                                src={user.photoURL}
-                                alt="user avatar"
-                                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                                className="w-10 h-10 rounded-full cursor-pointer border-2 border-orange-600"
-                            />
-                            {isDropdownOpen && (
-                                <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded z-20 p-4 text-gray-800">
-                                    <div className="text-sm mb-2 font-medium">{user.displayName}</div>
-                                    <button
-                                        onClick={handleLogout}
-                                        className="w-full py-2 px-4 bg-orange-600 text-white rounded relative overflow-hidden hover:bg-orange-700 transition"
-                                    >
-                                        Logout
-                                        <span className="absolute bottom-0 left-0 w-0 h-1 bg-yellow-400 transition-all duration-300 hover:w-full"></span>
-                                    </button>
-                                </div>
-                            )}
+                        <div className="flex items-center gap-2">
+                            <div>
+                                <img
+                                    src={user.photoURL}
+                                    alt="user avatar"
+                                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                                    className="w-10 h-10 rounded-full cursor-pointer border-2 border-orange-600"
+                                />
+                            </div>
 
+                            <div>
+                                <button
+                                    onClick={handleLogout}
+                                    className="w-full py-2 px-4 bg-orange-600 text-white rounded relative overflow-hidden hover:bg-orange-700 transition"
+                                >
+                                    Logout
+                                    <span className="absolute bottom-0 left-0 w-0 h-1 bg-yellow-400 transition-all duration-300 hover:w-full"></span>
+                                </button>
+                            </div>
 
 
                         </div>
@@ -145,7 +143,7 @@ const Navbar = () => {
                                     ) : (
                                         <FaUserCircle size={32} />
                                     )}
-                                    <span className="font-medium">{user.displayName}</span>
+                                    {/* <span className="font-medium">{user.displayName}</span> */}
                                 </div>
                                 <button
                                     onClick={() => {

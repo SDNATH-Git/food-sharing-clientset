@@ -5,7 +5,7 @@ import Logo from "../assets/Logo.png";
 const Footer = () => {
     return (
         <footer className="bg-gray-900 text-base-content  p-6 shadow-inner text-white">
-            <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="  grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
 
                 {/* App Info */}
                 <div>
