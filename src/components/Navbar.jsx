@@ -42,23 +42,6 @@ const Navbar = () => {
         { name: "My Recipes", path: "/my-recipes" },
     ];
 
-    // const renderNavLinks = (onClickClose = null) =>
-    //     navLinks.map((link) => (
-    //         <NavLink
-    //             key={link.name}
-    //             to={link.path}
-    //             onClick={() => onClickClose?.()}
-    //             className={({ isActive }) =>
-    //                 `relative transition hover:text-green-600 ${isActive
-    //                     ? "text-green-600 font-semibold underline"
-    //                     : ""
-    //                 }`
-    //             }
-    //         >
-    //             {link.name}
-    //         </NavLink>
-    //     ));
-
     const renderNavLinks = (onClickClose = null) =>
         navLinks.map((link) => (
             <NavLink
