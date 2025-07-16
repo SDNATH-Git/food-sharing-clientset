@@ -37,9 +37,10 @@ const Navbar = () => {
 
     const navLinks = [
         { name: "Home", path: "/" },
-        { name: "All Recipes", path: "/all-recipes" },
-        { name: "Add Recipe", path: "/add-recipes" },
-        { name: "My Recipes", path: "/my-recipes" },
+        { name: "Available Foods", path: "/available-foods" },
+        { name: "Add Food", path: "/add-food" },
+        { name: "Manage My Foods", path: "/manage-my-foods" },
+        { name: "My Food Request", path: "/my-food-request" },
     ];
 
     const renderNavLinks = (onClickClose = null) =>
@@ -73,7 +74,7 @@ const Navbar = () => {
                 </div>
 
                 {/* Desktop Nav */}
-                <nav className="hidden md:flex space-x-6 text-base">{renderNavLinks()}</nav>
+                <nav className="hidden md:flex space-x-2 text-base">{renderNavLinks()}</nav>
 
                 {/* Right Actions */}
                 <div className="hidden md:flex items-center space-x-4 relative">
@@ -83,7 +84,7 @@ const Navbar = () => {
                                 src={user.photoURL}
                                 alt="user avatar"
                                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                                className="w-10 h-10 rounded-full cursor-pointer border-2 border-violet-600"
+                                className="w-10 h-10 rounded-full cursor-pointer border-2 border-orange-600"
                             />
                             {isDropdownOpen && (
                                 <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded z-20 p-4 text-gray-800">
@@ -97,6 +98,9 @@ const Navbar = () => {
                                     </button>
                                 </div>
                             )}
+
+
+
                         </div>
                     ) : (
                         <>
@@ -107,7 +111,7 @@ const Navbar = () => {
                             </NavLink>
                             <NavLink to="/register">
                                 <button className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition btn">
-                                    Register
+                                    SignUp
                                 </button>
                             </NavLink>
                         </>
@@ -163,7 +167,7 @@ const Navbar = () => {
                                 </NavLink>
                                 <NavLink to="/register" onClick={() => setIsMenuOpen(false)}>
                                     <button className="w-full py-2 bg-green-600 text-white rounded hover:bg-green-700 transition btn">
-                                        Register
+                                        SignUp
                                     </button>
                                 </NavLink>
                             </>
