@@ -73,7 +73,7 @@ const Navbar = () => {
                 </div>
 
                 {/* Desktop Nav */}
-                <nav className="hidden md:flex space-x-2 text-base">{renderNavLinks()}</nav>
+                <nav className="hidden md:flex   text-base">{renderNavLinks()}</nav>
 
                 {/* Right Actions */}
                 <div className="hidden md:flex items-center space-x-4 relative">
