@@ -89,7 +89,6 @@ export default function MyFoodRequest() {
                                 <td>{index + 1}</td>
                                 <td className="font-semibold">{req.foodName}</td>
                                 <td>{req.donorName}</td>
-                                {/* এখানে pickupLocation এর জায়গায় location ব্যবহার করা হয়েছে */}
                                 <td>{req.location}</td>
                                 <td className="text-sm">{new Date(req.expiredAt).toLocaleString()}</td>
                                 <td className="text-sm">{new Date(req.requestDate).toLocaleString()}</td>
