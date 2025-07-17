@@ -29,7 +29,7 @@ export default function FeaturedFoods() {
     };
 
     return (
-        <div className="py-10 px-5 md:px-20 bg-gradient-to-br from-green-50 to-orange-50">
+        <div className="py-10 px-5 md:px-20 ">
             <h2 className="text-3xl text-center font-bold text-green-700 mb-6">🍱 Featured Foods</h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
