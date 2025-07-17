@@ -18,7 +18,7 @@ A full-stack web application that allows users to share surplus food with others
 
 ## 🌐 Live URL
 
-🔗 [Visit the Live Website](https://your-live-site-url.netlify.app)
+🔗 [Visit the Live Website](https://food-sharing-1821c.web.app/)
 
 ---
 
