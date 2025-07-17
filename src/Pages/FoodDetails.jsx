@@ -1,4 +1,3 @@
-// src/Pages/FoodDetails.jsx
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "../Provider/AuthProvider";
@@ -18,6 +17,12 @@ export default function FoodDetails() {
     }, [id]);
 
     const handleRequest = async () => {
+        const token = localStorage.getItem("access-token");
+        if (!token) {
+            Swal.fire("Error", "You must be logged in to make a request.", "error");
+            return;
+        }
+
         const requestInfo = {
             foodId: food._id,
             foodName: food.foodName,
@@ -31,29 +36,39 @@ export default function FoodDetails() {
             notes,
         };
 
-        // 1. Save to request collection
-        const res1 = await fetch("http://localhost:5000/requests", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(requestInfo),
-        });
+        try {
+            // 1. Save to requests collection
+            const res1 = await fetch("http://localhost:5000/requests", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(requestInfo),
+            });
 
-        // 2. Update food status to "requested"
-        const res2 = await fetch(`http://localhost:5000/foods/${id}`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ status: "requested" }),
-        });
+            // 2. Update food status to "requested"
+            const res2 = await fetch(`http://localhost:5000/foods/${id}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ status: "requested" }),
+            });
 
-        if (res1.ok && res2.ok) {
-            Swal.fire("Requested!", "Food has been requested.", "success");
-            setShowModal(false);
-        } else {
-            Swal.fire("Error!", "Something went wrong.", "error");
+            if (res1.ok && res2.ok) {
+                Swal.fire("✅ Success!", "Food request has been submitted.", "success");
+                setShowModal(false);
+            } else {
+                throw new Error("Request failed");
+            }
+        } catch (err) {
+            Swal.fire("❌ Error!", err.message || "Something went wrong.", "error");
         }
     };
 
-    if (!food) return <div className="text-center py-20">Loading...</div>;
+    if (!food) return <div className="text-center py-20 text-xl">⏳ Loading food details...</div>;
 
     return (
         <div className="px-6 md:px-20 py-10 bg-gradient-to-r from-green-50 to-orange-50 min-h-screen">

@@ -5,30 +5,61 @@ export default function MyFoodRequest() {
     const { user } = useContext(AuthContext);
     const [myRequests, setMyRequests] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         if (user?.email) {
-            fetch(`http://localhost:5000/requests?email=${user.email}`)
-                .then((res) => res.json())
+            const token = localStorage.getItem("access-token");
+            fetch(`http://localhost:5000/requests?email=${user.email}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+                .then((res) => {
+                    if (!res.ok) {
+                        throw new Error("Unauthorized access");
+                    }
+                    return res.json();
+                })
                 .then((data) => {
-                    setMyRequests(data);
+                    if (Array.isArray(data)) {
+                        setMyRequests(data);
+                    } else {
+                        console.error("Invalid data format:", data);
+                        setMyRequests([]);
+                    }
                     setLoading(false);
                 })
                 .catch((error) => {
-                    console.error("Error fetching requests:", error);
+                    console.error("Error fetching requests:", error.message);
+                    setError(error.message);
                     setLoading(false);
                 });
         }
     }, [user?.email]);
 
     if (loading) {
-        return <p className="text-center py-10 text-lg text-orange-600">⏳ Loading your food requests...</p>;
+        return (
+            <p className="text-center py-10 text-lg text-orange-600 animate-pulse">
+                ⏳ Loading your requests...
+            </p>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="text-center py-20">
+                <h2 className="text-2xl text-red-600 font-semibold">❌ {error}</h2>
+            </div>
+        );
     }
 
     if (myRequests.length === 0) {
         return (
             <div className="text-center py-20">
-                <h2 className="text-2xl text-orange-600 font-semibold">You have not made any food requests yet.</h2>
+                <h2 className="text-2xl text-orange-600 font-semibold">
+                    You have not requested any food yet.
+                </h2>
             </div>
         );
     }
@@ -58,7 +89,8 @@ export default function MyFoodRequest() {
                                 <td>{index + 1}</td>
                                 <td className="font-semibold">{req.foodName}</td>
                                 <td>{req.donorName}</td>
-                                <td>{req.pickupLocation}</td>
+                                {/* এখানে pickupLocation এর জায়গায় location ব্যবহার করা হয়েছে */}
+                                <td>{req.location}</td>
                                 <td className="text-sm">{new Date(req.expiredAt).toLocaleString()}</td>
                                 <td className="text-sm">{new Date(req.requestDate).toLocaleString()}</td>
                                 <td>

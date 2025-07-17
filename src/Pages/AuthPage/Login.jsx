@@ -1,3 +1,5 @@
+
+
 import React, { useContext, useState } from "react";
 import login from "../../assets/login.json";
 import Lottie from "lottie-react";
@@ -21,6 +23,23 @@ const Login = () => {
         "w-full px-5 py-3 border border-orange-400 text-orange-500 bg-gray-800 " +
         "placeholder-orange-300 text-lg rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500";
 
+    const saveToken = async (userEmail) => {
+        const res = await fetch("http://localhost:5000/jwt", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email: userEmail }),
+        });
+
+        const data = await res.json();
+        if (data.token) {
+            localStorage.setItem("access-token", data.token);
+        } else {
+            throw new Error("Token not received");
+        }
+    };
+
     const handleLogin = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -32,6 +51,9 @@ const Login = () => {
             const result = await signIn(emailInput, password);
             const user = result.user;
             setUser(user);
+
+            await saveToken(user.email); // ✅ token fetch and store
+
             toast.success("Login successful!");
             form.reset();
             setEmail("");
@@ -49,6 +71,9 @@ const Login = () => {
             const result = await googleSignIn();
             const user = result.user;
             setUser(user);
+
+            await saveToken(user.email); // ✅ token fetch and store
+
             toast.success("Google sign-in successful!");
             navigate(from, { replace: true });
         } catch (error) {
@@ -133,7 +158,7 @@ const Login = () => {
                             <button
                                 type="button"
                                 onClick={handleGoogleLogin}
-                                className="flex items-center gap-2 bg-white border border-orange-300 px-5 py-6 rounded-md shadow-md hover:shadow-lg transition-shadow text-lg w-full text-black font-semibold btn "
+                                className="flex items-center gap-2 bg-white border border-orange-300 px-5 py-6 rounded-md shadow-md hover:shadow-lg transition-shadow text-lg w-full text-black font-semibold btn"
                                 disabled={loading}
                             >
                                 <FcGoogle className="text-2xl" />

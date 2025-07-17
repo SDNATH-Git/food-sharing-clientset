@@ -1,8 +1,8 @@
+
 import React, { useContext, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import Lottie from "lottie-react";
 import login from "../../assets/register.json";
-import { MdHelpCenter } from "react-icons/md";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { AuthContext } from "../../Provider/AuthProvider";
@@ -47,7 +47,24 @@ const Register = () => {
         return true;
     };
 
-    const handleRegister = (e) => {
+    const saveToken = async (userEmail) => {
+        const res = await fetch("http://localhost:5000/jwt", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email: userEmail }),
+        });
+
+        const data = await res.json();
+        if (data.token) {
+            localStorage.setItem("access-token", data.token);
+        } else {
+            throw new Error("JWT token not received");
+        }
+    };
+
+    const handleRegister = async (e) => {
         e.preventDefault();
         const form = e.target;
         const username = form.username.value;
@@ -65,33 +82,39 @@ const Register = () => {
 
         setLoading(true);
 
-        createUser(email, password, username, photoURL)
-            .then((result) => {
-                const user = result.user;
-                setUser(user);
-                toast.success("Registration successful!");
-                form.reset();
-                navigate(from, { replace: true });
-            })
-            .catch((error) => {
-                toast.error(error.message);
-            })
-            .finally(() => setLoading(false));
+        try {
+            const result = await createUser(email, password, username, photoURL);
+            const user = result.user;
+            setUser(user);
+
+            await saveToken(user.email); // ✅ Save JWT
+
+            toast.success("Registration successful!");
+            form.reset();
+            navigate(from, { replace: true });
+        } catch (error) {
+            toast.error(error.message);
+        } finally {
+            setLoading(false);
+        }
     };
 
-    const handleGoogleLogin = () => {
+    const handleGoogleLogin = async () => {
         setLoading(true);
-        signInWithPopup(auth, provider)
-            .then((result) => {
-                const user = result.user;
-                setUser(user);
-                toast.success("Google sign-in successful!");
-                navigate(from, { replace: true });
-            })
-            .catch((error) => {
-                toast.error(error.message);
-            })
-            .finally(() => setLoading(false));
+        try {
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
+            setUser(user);
+
+            await saveToken(user.email); // ✅ Save JWT for Google login
+
+            toast.success("Google sign-in successful!");
+            navigate(from, { replace: true });
+        } catch (error) {
+            toast.error(error.message);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -154,7 +177,9 @@ const Register = () => {
                         <button
                             type="submit"
                             disabled={loading}
-                            className={`w-full py-4 rounded-md text-xl font-semibold transition-colors text-white ${loading ? " bg-orange-300 cursor-not-allowed" : " btn py-6 bg-orange-500 hover:bg-orange-600"
+                            className={`w-full py-4 rounded-md text-xl font-semibold transition-colors text-white ${loading
+                                ? "bg-orange-300 cursor-not-allowed"
+                                : "btn py-6 bg-orange-500 hover:bg-orange-600"
                                 }`}
                         >
                             {loading ? "Creating Account..." : "Sign Up"}
@@ -192,3 +217,4 @@ const Register = () => {
 };
 
 export default Register;
+
