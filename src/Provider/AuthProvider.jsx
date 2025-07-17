@@ -65,7 +65,7 @@ const AuthProvider = ({ children }) => {
     return sendPasswordResetEmail(auth, email);
   };
 
-  // ✅ Auth State Listener
+  // ✅ Auth State Listener-----
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -75,7 +75,7 @@ const AuthProvider = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
-  // ✅ Provide Context
+  // ✅ Provide Context-----
   const authData = {
     user,
     setUser,
