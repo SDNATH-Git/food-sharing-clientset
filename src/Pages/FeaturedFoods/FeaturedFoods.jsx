@@ -10,7 +10,7 @@ export default function FeaturedFoods() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch("http://localhost:5000/foods?status=available")
+        fetch("https://food-sharing-serverset.vercel.app/foods?status=available")
             .then(res => res.json())
             .then(data => {
                 const topFoods = [...data]

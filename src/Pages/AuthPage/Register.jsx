@@ -48,7 +48,7 @@ const Register = () => {
     };
 
     const saveToken = async (userEmail) => {
-        const res = await fetch("http://localhost:5000/jwt", {
+        const res = await fetch("https://food-sharing-serverset.vercel.app/jwt", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

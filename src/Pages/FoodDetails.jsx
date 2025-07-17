@@ -11,7 +11,7 @@ export default function FoodDetails() {
     const [notes, setNotes] = useState("");
 
     useEffect(() => {
-        fetch(`http://localhost:5000/foods/${id}`)
+        fetch(`https://food-sharing-serverset.vercel.app/foods/${id}`)
             .then((res) => res.json())
             .then((data) => setFood(data));
     }, [id]);
@@ -38,7 +38,7 @@ export default function FoodDetails() {
 
         try {
             // 1. Save to requests collection
-            const res1 = await fetch("http://localhost:5000/requests", {
+            const res1 = await fetch("https://food-sharing-serverset.vercel.app/requests", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -48,7 +48,7 @@ export default function FoodDetails() {
             });
 
             // 2. Update food status to "requested"
-            const res2 = await fetch(`http://localhost:5000/foods/${id}`, {
+            const res2 = await fetch(`https://food-sharing-serverset.vercel.app/foods/${id}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",

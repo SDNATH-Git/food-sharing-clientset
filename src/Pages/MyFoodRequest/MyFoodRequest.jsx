@@ -6,11 +6,12 @@ export default function MyFoodRequest() {
     const [myRequests, setMyRequests] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    //console.log("aaa");
 
     useEffect(() => {
         if (user?.email) {
             const token = localStorage.getItem("access-token");
-            fetch(`http://localhost:5000/requests?email=${user.email}`, {
+            fetch(`https://food-sharing-serverset.vercel.app/requests?email=${user.email}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -25,13 +26,13 @@ export default function MyFoodRequest() {
                     if (Array.isArray(data)) {
                         setMyRequests(data);
                     } else {
-                        console.error("Invalid data format:", data);
+                        //console.error("Invalid data format:", data);
                         setMyRequests([]);
                     }
                     setLoading(false);
                 })
                 .catch((error) => {
-                    console.error("Error fetching requests:", error.message);
+                    //console.error("Error fetching requests:", error.message);
                     setError(error.message);
                     setLoading(false);
                 });

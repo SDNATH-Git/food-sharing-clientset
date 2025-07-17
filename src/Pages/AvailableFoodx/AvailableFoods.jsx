@@ -8,7 +8,7 @@
 //     const [filteredFoods, setFilteredFoods] = useState([]);
 
 //     useEffect(() => {
-//         fetch("http://localhost:5000/foods?status=available")
+//         fetch("https://food-sharing-serverset.vercel.app/foods?status=available")
 //             .then((res) => res.json())
 //             .then((data) => {
 //                 setFoods(data);
@@ -102,7 +102,7 @@ const getToken = () => localStorage.getItem("access-token");
 // Fetch function with token header
 const fetchFoods = async () => {
     const token = getToken();
-    const res = await fetch("http://localhost:5000/foods?status=available", {
+    const res = await fetch("https://food-sharing-serverset.vercel.app/foods?status=available", {
         headers: {
             Authorization: `Bearer ${token}`,
         },

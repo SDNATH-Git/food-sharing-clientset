@@ -33,9 +33,12 @@ export default function AddFood() {
         };
 
         try {
-            const res = await fetch("http://localhost:5000/foods", {
+            const res = await fetch("https://food-sharing-serverset.vercel.app/foods", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("access-token")}`
+                },
                 body: JSON.stringify(foodData),
             });
 

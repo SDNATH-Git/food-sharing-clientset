@@ -9,14 +9,34 @@ export default function ManageMyFood() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (user?.email) {
-            fetch(`http://localhost:5000/foods?email=${user.email}`)
-                .then(res => res.json())
-                .then(data => setMyFoods(data));
+        const token = localStorage.getItem("access-token");
+
+        if (user?.email && token) {
+            fetch(`https://food-sharing-serverset.vercel.app/foods?email=${user.email}`, {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+                .then((res) => {
+                    if (!res.ok) {
+                        throw new Error("Unauthorized");
+                    }
+                    return res.json();
+                })
+                .then((data) => {
+                    setMyFoods(data);
+                })
+                .catch((err) => {
+                    console.error("Fetch error:", err.message);
+                    Swal.fire("Error", "Failed to fetch your foods", "error");
+                });
         }
     }, [user]);
 
     const handleDelete = (id) => {
+        const token = localStorage.getItem("access-token");
+
         Swal.fire({
             title: "Are you sure?",
             text: "You are about to delete this food item!",
@@ -27,8 +47,11 @@ export default function ManageMyFood() {
             confirmButtonText: "Yes, delete it!",
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`http://localhost:5000/foods/${id}`, {
+                fetch(`https://food-sharing-serverset.vercel.app/foods/${id}`, {
                     method: "DELETE",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
                 })
                     .then((res) => res.json())
                     .then((data) => {
@@ -36,6 +59,8 @@ export default function ManageMyFood() {
                             Swal.fire("Deleted!", "Food has been deleted.", "success");
                             const remaining = myFoods.filter((food) => food._id !== id);
                             setMyFoods(remaining);
+                        } else {
+                            Swal.fire("Error", "Failed to delete the food.", "error");
                         }
                     });
             }
@@ -105,7 +130,9 @@ export default function ManageMyFood() {
                     </table>
                 </div>
             ) : (
-                <p className="text-center text-gray-600">You haven’t added any food yet.</p>
+                <p className="text-center text-gray-600">
+                    You haven’t added any food yet.
+                </p>
             )}
         </div>
     );
