@@ -1,4 +1,3 @@
-// src/Pages/AddFood.jsx
 import { useContext, useState } from "react";
 import Swal from "sweetalert2";
 import { AuthContext } from "../../Provider/AuthProvider";
@@ -27,9 +26,9 @@ export default function AddFood() {
             expiredAt,
             notes,
             status: "available",
-            donorName: user?.displayName,
+            donorName: user?.displayName || "Anonymous",
             donorEmail: user?.email,
-            donorImage: user?.photoURL,
+            donorImage: user?.photoURL || "https://i.ibb.co/ZJcYB2g/default-user.png",
             addedAt: new Date(),
         };
 
@@ -41,21 +40,21 @@ export default function AddFood() {
             });
 
             const data = await res.json();
-            if (data.insertedId) {
-                Swal.fire("Success!", "Food added successfully", "success");
+            if (data.insertedId || data.acknowledged) {
+                Swal.fire("✅ Success!", "Food added successfully", "success");
                 form.reset();
             } else {
-                throw new Error("Failed to add");
+                throw new Error("Failed to add food.");
             }
         } catch (err) {
-            Swal.fire("Error!", err.message, "error");
+            Swal.fire("❌ Error!", err.message, "error");
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className="mx-4 md:mx-36 px-6 py-10 mt-10 mb-16  bg-gradient-to-r from-green-50 via-orange-50 to-green-50 shadow-xl rounded-2xl">
+        <div className="mx-4 md:mx-36 px-6 py-10 mt-10 mb-16 bg-gradient-to-r from-green-50 via-orange-50 to-green-50 shadow-xl rounded-2xl">
             <h2 className="text-4xl font-bold text-center text-green-700 mb-8">
                 🍽️ Add Food
             </h2>
@@ -85,15 +84,15 @@ export default function AddFood() {
                     <textarea name="notes" rows="3" className="textarea textarea-bordered w-full" placeholder="Any special note?"></textarea>
                 </div>
 
-                {/* Donor Info */}
+                {/* ✅ Donor Info Section */}
                 <div className="md:col-span-2 mt-4 bg-white p-4 rounded-xl border border-orange-200 flex items-center gap-4 shadow">
                     <img
-                        src={user?.photoURL}
+                        src={user?.photoURL || "https://i.ibb.co/ZJcYB2g/default-user.png"}
                         alt="Donor"
                         className="w-16 h-16 rounded-full object-cover ring-2 ring-orange-400"
                     />
                     <div>
-                        <p className="text-green-800 font-bold">{user?.displayName}</p>
+                        <p className="text-green-800 font-bold">{user?.displayName || "Anonymous"}</p>
                         <p className="text-orange-600 text-sm">{user?.email}</p>
                     </div>
                 </div>
@@ -111,3 +110,4 @@ export default function AddFood() {
         </div>
     );
 }
+

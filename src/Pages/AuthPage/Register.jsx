@@ -24,9 +24,7 @@ const Register = () => {
     const from = location.state?.from?.pathname || "/";
 
     const inputStyle =
-        "w-full px-6 py-4 border text-lg rounded-md focus:outline-none " +
-        "focus:ring-2 text-orange-500 border-orange-400 focus:ring-orange-600 " +
-        "bg-gray-800 placeholder-orange-300";
+        "w-full px-6 py-4 border text-lg rounded-md focus:outline-none focus:ring-2 text-orange-500 border-orange-400 focus:ring-orange-600 bg-gray-800 placeholder-orange-300";
 
     const validatePassword = (password) => {
         const hasUppercase = /[A-Z]/.test(password);
@@ -63,12 +61,11 @@ const Register = () => {
             return;
         }
 
-        if (!validatePassword(password)) {
-            return;
-        }
+        if (!validatePassword(password)) return;
 
         setLoading(true);
-        createUser(email, password)
+
+        createUser(email, password, username, photoURL)
             .then((result) => {
                 const user = result.user;
                 setUser(user);
@@ -111,31 +108,24 @@ const Register = () => {
                     <form onSubmit={handleRegister} className="w-full md:w-1/2 space-y-4">
                         <div>
                             <label className="block mb-2 text-lg text-orange-400">Username</label>
-                            <input type="text" name="username" placeholder="Enter your username" className={inputStyle} required />
+                            <input type="text" name="username" required placeholder="Enter your name" className={inputStyle} />
                         </div>
                         <div>
                             <label className="block mb-2 text-lg text-orange-400">Email</label>
-                            <input type="email" name="email" placeholder="Enter your email" className={inputStyle} required />
+                            <input type="email" name="email" required placeholder="Enter your email" className={inputStyle} />
                         </div>
                         <div>
-                            <label className="block mb-2 text-lg text-orange-400">
-                                <div className="flex items-center gap-2">
-                                    <span>Photo URL</span>
-                                    <Link to="/what-is-photoURL">
-                                        <MdHelpCenter size={20} className="text-orange-400" />
-                                    </Link>
-                                </div>
-                            </label>
-                            <input type="text" name="photoURL" placeholder="Enter photo URL" className={inputStyle} />
+                            <label className="block mb-2 text-lg text-orange-400">Photo URL</label>
+                            <input type="text" name="photoURL" placeholder="Enter your photo URL" className={inputStyle} />
                         </div>
                         <div className="relative">
                             <label className="block mb-2 text-lg text-orange-400">Password</label>
                             <input
                                 type={showPassword ? "text" : "password"}
                                 name="password"
+                                required
                                 placeholder="Create a password"
                                 className={`${inputStyle} pr-12`}
-                                required
                             />
                             <div
                                 className="absolute right-5 top-[60px] text-orange-400 cursor-pointer"
@@ -149,9 +139,9 @@ const Register = () => {
                             <input
                                 type={showConfirmPassword ? "text" : "password"}
                                 name="confirmPassword"
+                                required
                                 placeholder="Confirm your password"
                                 className={`${inputStyle} pr-12`}
-                                required
                             />
                             <div
                                 className="absolute right-5 top-[60px] text-orange-400 cursor-pointer"
@@ -160,13 +150,14 @@ const Register = () => {
                                 {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
                             </div>
                         </div>
+
                         <button
                             type="submit"
                             disabled={loading}
                             className={`w-full py-4 rounded-md text-xl font-semibold transition-colors text-white ${loading ? " bg-orange-300 cursor-not-allowed" : " btn py-6 bg-orange-500 hover:bg-orange-600"
                                 }`}
                         >
-                            Sign Up
+                            {loading ? "Creating Account..." : "Sign Up"}
                         </button>
 
                         <div className="flex items-center gap-4 mt-2">
@@ -179,7 +170,7 @@ const Register = () => {
                             <button
                                 type="button"
                                 onClick={handleGoogleLogin}
-                                className="flex items-center gap-2 bg-white border border-orange-300 px-5 py-6 rounded-md shadow-md hover:shadow-lg transition-shadow text-lg w-full text-black btn  font-semibold"
+                                className="flex items-center gap-2 bg-white border border-orange-300 px-5 py-6 rounded-md shadow-md hover:shadow-lg transition-shadow text-lg w-full text-black btn font-semibold"
                                 disabled={loading}
                             >
                                 <FcGoogle className="text-2xl" />

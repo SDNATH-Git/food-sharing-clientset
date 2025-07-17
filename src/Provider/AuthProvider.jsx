@@ -9,6 +9,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   sendPasswordResetEmail,
+  updateProfile, // ✅ user profile update function
 } from "firebase/auth";
 
 // Create the Auth Context
@@ -19,37 +20,52 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Email/Password Sign Up
-  const createUser = (email, password) => {
-    setLoading(true)
-    return createUserWithEmailAndPassword(auth, email, password);
+  // ✅ Email/Password Sign Up with Name & Photo
+  const createUser = async (email, password, name, photoURL) => {
+    setLoading(true);
+    const result = await createUserWithEmailAndPassword(auth, email, password);
+
+    // ✅ Update Firebase Profile
+    await updateProfile(auth.currentUser, {
+      displayName: name,
+      photoURL: photoURL,
+    });
+
+    // Manually set updated user for instant access
+    setUser({
+      ...result.user,
+      displayName: name,
+      photoURL: photoURL,
+    });
+
+    return result;
   };
 
-  // Email/Password Sign In
+  // ✅ Email/Password Sign In
   const signIn = (email, password) => {
-        setLoading(true)
+    setLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
   };
 
-  // Google Sign In
+  // ✅ Google Sign In
   const googleProvider = new GoogleAuthProvider();
   const googleSignIn = () => {
-        setLoading(true)
+    setLoading(true);
     return signInWithPopup(auth, googleProvider);
   };
 
-  // Logout
+  // ✅ Logout
   const logout = () => {
+    setLoading(true);
     return signOut(auth);
   };
 
-  // **Add this function to send reset password email**
+  // ✅ Password Reset
   const resetPassword = (email) => {
     return sendPasswordResetEmail(auth, email);
   };
 
-
-  // Auth State Listener
+  // ✅ Auth State Listener
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -59,7 +75,7 @@ const AuthProvider = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
-  // Context value
+  // ✅ Provide Context
   const authData = {
     user,
     setUser,
@@ -68,7 +84,7 @@ const AuthProvider = ({ children }) => {
     logout,
     googleSignIn,
     loading,
-    resetPassword
+    resetPassword,
   };
 
   return (
