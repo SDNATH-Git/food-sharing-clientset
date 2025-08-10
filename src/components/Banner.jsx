@@ -6,7 +6,7 @@ import bgAnimation from "../assets/bgAnimation.json";
 
 const Banner = () => {
     return (
-        <section className="relative overflow-hidden min-h-[85vh] flex items-center justify-center px-10 py-12 bg-gradient-to-r from-green-100 via-white to-orange-100">
+        <section className="relative overflow-hidden  flex items-center justify-center px-5 md:px-10 py-12 bg-gradient-to-r from-green-100 via-white to-orange-100">
             {/* Background Animation */}
             <div className="absolute inset-0 -z-20 opacity-30 pointer-events-none select-none">
                 <Lottie animationData={bgAnimation} loop={true} />
