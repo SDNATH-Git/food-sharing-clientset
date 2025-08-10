@@ -36,6 +36,7 @@ const Navbar = () => {
         { name: "Add Food", path: "/add-food" },
         { name: "Manage My Foods", path: "/manage-my-foods" },
         { name: "My Food Request", path: "/my-food-request" },
+        { name: "About", path: "/about" },
     ];
 
     const renderNavLinks = (onClickClose = null) =>
