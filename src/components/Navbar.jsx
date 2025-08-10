@@ -1,6 +1,5 @@
-
 import React, { useState, useContext, useEffect, useRef } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { FaBars, FaTimes, FaChevronDown } from "react-icons/fa";
 import Logo from "../assets/Logo.png";
 import { AuthContext } from "../Provider/AuthProvider";
@@ -12,6 +11,7 @@ const Navbar = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
     const { user, logout } = useContext(AuthContext);
+    const location = useLocation();  // <-- useLocation hook
 
     useEffect(() => {
         const handleScroll = () => setIsSticky(window.scrollY > 10);
@@ -59,9 +59,10 @@ const Navbar = () => {
                 to={link.path}
                 onClick={() => onClickClose?.()}
                 className={({ isActive }) =>
-                    `px-4 py-2 rounded-md font-medium transition duration-300 whitespace-nowrap ${isActive
-                        ? "bg-orange-100 text-orange-700 shadow-sm"
-                        : "text-gray-700 hover:text-orange-600"
+                    `px-4 py-2 rounded-md font-medium transition duration-300 whitespace-nowrap
+          ${isActive
+                        ? "border-b-2 border-green-500 text-green-500"
+                        : "border-b-2 border-transparent text-gray-700 hover:text-green-600 hover:border-green-400"
                     }`
                 }
             >
@@ -69,10 +70,16 @@ const Navbar = () => {
             </NavLink>
         ));
 
+    // শর্ত: হোম পেজে আছি এবং স্ক্রোল হয়নি (isSticky=false)
+    // তখন gradient, অন্যথায় সাদা ব্যাকগ্রাউন্ড
+    const headerBgClass =
+        location.pathname === "/" && !isSticky
+            ? "bg-gradient-to-r from-green-100 via-white to-orange-100"
+            : "bg-white shadow-md";
+
     return (
         <header
-            className={`sticky top-0 z-50 bg-white transition-all duration-300 ${isSticky ? "shadow-md" : ""
-                }`}
+            className={`sticky top-0 z-50 transition-all duration-300 ${headerBgClass}`}
         >
             <div className="container mx-auto px-4 flex items-center justify-between h-16">
                 {/* Logo */}
@@ -143,7 +150,7 @@ const Navbar = () => {
                     ) : (
                         <>
                             <NavLink to="/login">
-                                <button className="px-4 py-2 bg-orange-600 text-white rounded hover:bg-orange-700 transition">
+                                <button className="px-4 py-1.5 font-bold bg-white text-orange-600 border-2 border-orange-600 rounded hover:bg-orange-100 transition">
                                     Login
                                 </button>
                             </NavLink>
@@ -222,6 +229,31 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

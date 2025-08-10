@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../Provider/AuthProvider";
+import Loading from "../../components/Loading";
 
 export default function MyFoodRequest() {
     const { user } = useContext(AuthContext);
@@ -42,7 +43,7 @@ export default function MyFoodRequest() {
     if (loading) {
         return (
             <p className="text-center py-10 text-lg text-orange-600 animate-pulse">
-                ⏳ Loading your requests...
+                <Loading></Loading>
             </p>
         );
     }

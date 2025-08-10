@@ -1,3 +1,4 @@
+
 import { useContext, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
@@ -72,54 +73,61 @@ export default function ManageMyFood() {
     };
 
     return (
-        <div className="py-10 px-4 md:px-20">
-            <h2 className="text-3xl font-bold text-green-700 text-center mb-6">
+        <div className="py-12 px-4 md:px-20 bg-gray-50 min-h-screen">
+            <h2 className="text-4xl font-extrabold text-green-700 text-center mb-10 drop-shadow-md">
                 🍽️ Manage My Foods
             </h2>
 
             {myFoods.length > 0 ? (
-                <div className="overflow-x-auto">
-                    <table className="table w-full border">
-                        <thead className="bg-green-100 text-green-800">
+                <div className="overflow-x-auto rounded-lg shadow-lg border border-green-200 bg-white">
+                    <table className="table-auto w-full text-left min-w-[700px]">
+                        <thead className="bg-green-100 text-green-800 uppercase text-sm">
                             <tr>
-                                <th>#</th>
-                                <th>Image</th>
-                                <th>Food Name</th>
-                                <th>Quantity</th>
-                                <th>Expire Date</th>
-                                <th>Status</th>
-                                <th>Actions</th>
+                                <th className="px-6 py-3">#</th>
+                                <th className="px-6 py-3">Image</th>
+                                <th className="px-6 py-3">Food Name</th>
+                                <th className="px-6 py-3">Quantity</th>
+                                <th className="px-6 py-3">Expire Date</th>
+                                <th className="px-6 py-3">Status</th>
+                                <th className="px-6 py-3">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {myFoods.map((food, index) => (
-                                <tr key={food._id} className="hover:bg-orange-50">
-                                    <td>{index + 1}</td>
-                                    <td>
+                                <tr
+                                    key={food._id}
+                                    className="border-b border-green-100 hover:bg-green-50 transition"
+                                >
+                                    <td className="px-6 py-4 font-medium">{index + 1}</td>
+                                    <td className="px-6 py-4">
                                         <img
                                             src={food.foodImage}
                                             alt={food.foodName}
-                                            className="w-12 h-12 rounded object-cover"
+                                            className="w-14 h-14 rounded-xl object-cover border border-green-300 shadow-sm"
                                         />
                                     </td>
-                                    <td className="font-semibold">{food.foodName}</td>
-                                    <td>{food.quantity}</td>
-                                    <td>{new Date(food.expiredAt).toLocaleString()}</td>
-                                    <td>
-                                        <span className="badge bg-green-200 text-green-800">
+                                    <td className="px-6 py-4 font-semibold text-green-800">{food.foodName}</td>
+                                    <td className="px-6 py-4 text-green-700">{food.quantity}</td>
+                                    <td className="px-6 py-4 text-green-700">
+                                        {new Date(food.expiredAt).toLocaleString()}
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <span className="inline-block bg-green-200 text-green-800 px-3 py-1 rounded-full text-xs font-semibold">
                                             {food.status}
                                         </span>
                                     </td>
-                                    <td className="space-x-2">
+                                    <td className="px-6 py-4 space-x-3 whitespace-nowrap">
                                         <button
                                             onClick={() => handleUpdate(food._id)}
-                                            className="btn btn-sm bg-green-500 text-white hover:bg-green-600"
+                                            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+                                            title="Update Food"
                                         >
                                             Update
                                         </button>
                                         <button
                                             onClick={() => handleDelete(food._id)}
-                                            className="btn btn-sm bg-orange-500 text-white hover:bg-red-600"
+                                            className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+                                            title="Delete Food"
                                         >
                                             Delete
                                         </button>
@@ -130,7 +138,7 @@ export default function ManageMyFood() {
                     </table>
                 </div>
             ) : (
-                <p className="text-center text-gray-600">
+                <p className="text-center text-gray-600 text-lg mt-20">
                     You haven’t added any food yet.
                 </p>
             )}
