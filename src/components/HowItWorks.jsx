@@ -75,7 +75,7 @@ const steps = [
 
 export default function HowItWorks() {
     return (
-        <section className="bg-gradient-to-br from-green-50 to-orange-50 py-16 px-5 md:px-10">
+        <section className=" py-16 px-5 md:px-10">
             <h2 className="text-4xl font-extrabold text-center mb-14 text-green-900 drop-shadow-md flex items-center justify-center gap-3">
                 <FaCogs className="text-green-700" size={36} />
                 How It Works
