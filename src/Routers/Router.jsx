@@ -14,6 +14,7 @@ import AvailableFoods from "../Pages/AvailableFoodx/AvailableFoods";
 import FoodDetails from "../Pages/FoodDetails";
 import UpdateFood from "../Pages/UpdateFood";
 import About from "../components/About";
+import AuthLayout from "../Layout/AuthLayout";
 
 
 const router = createBrowserRouter([
@@ -25,14 +26,6 @@ const router = createBrowserRouter([
             {
                 index: true,
                 Component: Home,
-            },
-            {
-                path: "/login",
-                Component: Login,
-            },
-            {
-                path: "/register",
-                Component: Register,
             },
             {
                 path: "/available-foods",
@@ -62,6 +55,21 @@ const router = createBrowserRouter([
             {
                 path: "/update-food/:id",
                 element: <PrivateRoute><UpdateFood></UpdateFood> </PrivateRoute>
+            },
+
+        ]
+    },
+    {
+        path: '/',
+        Component: AuthLayout,
+        children: [
+            {
+                path: "/login",
+                Component: Login,
+            },
+            {
+                path: "/register",
+                Component: Register,
             },
 
         ]

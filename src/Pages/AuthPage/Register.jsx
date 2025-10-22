@@ -1,4 +1,4 @@
-
+"use client";
 import React, { useContext, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import Lottie from "lottie-react";
@@ -9,6 +9,8 @@ import { AuthContext } from "../../Provider/AuthProvider";
 import { toast } from "react-toastify";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import app from "../../Firebase/firebase.config";
+import { motion } from "framer-motion";
+import Logo from "../../assets/Logo.png";
 
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
@@ -24,7 +26,7 @@ const Register = () => {
     const from = location.state?.from?.pathname || "/";
 
     const inputStyle =
-        "w-full px-6 py-4 border text-lg rounded-md focus:outline-none focus:ring-2 text-orange-500 border-orange-400 focus:ring-orange-600 bg-gray-800 placeholder-orange-300";
+        "w-full px-5 py-3 border text-lg rounded-xl focus:outline-none focus:ring-2 text-green-800 border-green-400 focus:ring-green-500 bg-white placeholder-green-300 transition-all";
 
     const validatePassword = (password) => {
         const hasUppercase = /[A-Z]/.test(password);
@@ -50,18 +52,12 @@ const Register = () => {
     const saveToken = async (userEmail) => {
         const res = await fetch("https://food-sharing-serverset.vercel.app/jwt", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email: userEmail }),
         });
-
         const data = await res.json();
-        if (data.token) {
-            localStorage.setItem("access-token", data.token);
-        } else {
-            throw new Error("JWT token not received");
-        }
+        if (data.token) localStorage.setItem("access-token", data.token);
+        else throw new Error("JWT token not received");
     };
 
     const handleRegister = async (e) => {
@@ -81,14 +77,11 @@ const Register = () => {
         if (!validatePassword(password)) return;
 
         setLoading(true);
-
         try {
             const result = await createUser(email, password, username, photoURL);
             const user = result.user;
             setUser(user);
-
-            await saveToken(user.email); // ✅ Save JWT
-
+            await saveToken(user.email);
             toast.success("Registration successful!");
             form.reset();
             navigate(from, { replace: true });
@@ -105,9 +98,7 @@ const Register = () => {
             const result = await signInWithPopup(auth, provider);
             const user = result.user;
             setUser(user);
-
-            await saveToken(user.email); // ✅ Save JWT for Google login
-
+            await saveToken(user.email);
             toast.success("Google sign-in successful!");
             navigate(from, { replace: true });
         } catch (error) {
@@ -118,99 +109,127 @@ const Register = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-300 px-4 p-6">
-            <div className="bg-gray-800 p-6 sm:p-10 rounded-2xl shadow-lg w-full max-w-6xl text-orange-500">
-                <h2 className="text-4xl font-bold text-center mb-10 text-orange-400">
-                    Create a New Account
+
+        <div className="bg-gradient-to-b from-green-50 via-white to-orange-100 relative w-full h-full overflow-hidden flex flex-col items-center ">
+
+            <div>
+                <Link to="/">
+                    <div className="flex items-center justify-center pt-16">
+                        <img className="w-20" src={Logo} alt="Logo" />
+
+                    </div>
+                </Link>
+                <h2 className="text-xl md:text-3xl font-bold text-center text-green-800 mb-6">
+                    Create a Food Sharing New Account
                 </h2>
-                <div className="flex flex-col md:flex-row items-center gap-10">
-                    <div className="w-full md:w-1/2">
-                        <Lottie animationData={login} loop={true} />
+            </div>
+
+
+            {/* Container */}
+            <div className="flex flex-col md:flex-row items-center justify-center w-full gap-10 md:gap-12 z-10 px-5 md:px-20 pb-20">
+
+                {/* Lottie Animation */}
+                <motion.div
+                    className="w-full md:w-1/2 "
+                    initial={{ opacity: 0, x: -50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 1, delay: 0.5 }}
+                >
+                    <Lottie animationData={login} loop={true} className="w-full h-auto" />
+                </motion.div>
+
+                {/* Register Form */}
+                <motion.form
+                    onSubmit={handleRegister}
+                    className="w-full md:w-1/2  bg-green-50 p-8 md:p-10 rounded-2xl shadow-lg border border-green-200 flex flex-col gap-3 relative"
+                    initial={{ opacity: 0, x: 50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 1, delay: 0.6 }}
+                >
+                    <div>
+                        <label className="block mb-2 text-lg text-green-700">Username</label>
+                        <input type="text" name="username" placeholder="Enter your name" required className={inputStyle} />
+                    </div>
+                    <div>
+                        <label className="block mb-2 text-lg text-green-700">Email</label>
+                        <input type="email" name="email" placeholder="Enter your email" required className={inputStyle} />
+                    </div>
+                    <div>
+                        <label className="block mb-2 text-lg text-green-700">Photo URL</label>
+                        <input type="text" name="photoURL" placeholder="Enter your photo URL" className={inputStyle} />
                     </div>
 
-                    <form onSubmit={handleRegister} className="w-full md:w-1/2 space-y-4">
-                        <div>
-                            <label className="block mb-2 text-lg text-orange-400">Username</label>
-                            <input type="text" name="username" required placeholder="Enter your name" className={inputStyle} />
-                        </div>
-                        <div>
-                            <label className="block mb-2 text-lg text-orange-400">Email</label>
-                            <input type="email" name="email" required placeholder="Enter your email" className={inputStyle} />
-                        </div>
-                        <div>
-                            <label className="block mb-2 text-lg text-orange-400">Photo URL</label>
-                            <input type="text" name="photoURL" placeholder="Enter your photo URL" className={inputStyle} />
-                        </div>
-                        <div className="relative">
-                            <label className="block mb-2 text-lg text-orange-400">Password</label>
+                    <div>
+                        <label className="block mb-2 text-lg text-green-700">Password</label>
+                        <div className="relative ">
                             <input
                                 type={showPassword ? "text" : "password"}
                                 name="password"
-                                required
                                 placeholder="Create a password"
+                                required
                                 className={`${inputStyle} pr-12`}
                             />
+
                             <div
-                                className="absolute right-5 top-[60px] text-orange-400 cursor-pointer"
+                                className="absolute right-4 top-1/2 transform -translate-y-1/2 cursor-pointer text-green-600"
                                 onClick={() => setShowPassword(!showPassword)}
                             >
                                 {showPassword ? <FaEyeSlash /> : <FaEye />}
                             </div>
                         </div>
+
+                    </div>
+
+                    <div>
+                        <label className="block mb-2 text-lg text-green-700">Confirm Password</label>
                         <div className="relative">
-                            <label className="block mb-2 text-lg text-orange-400">Confirm Password</label>
                             <input
                                 type={showConfirmPassword ? "text" : "password"}
                                 name="confirmPassword"
-                                required
                                 placeholder="Confirm your password"
+                                required
                                 className={`${inputStyle} pr-12`}
                             />
                             <div
-                                className="absolute right-5 top-[60px] text-orange-400 cursor-pointer"
+                                className="absolute right-4 top-1/2 transform -translate-y-1/2 cursor-pointer text-green-600"
                                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                             >
                                 {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
                             </div>
                         </div>
+                    </div>
 
-                        <button
-                            type="submit"
-                            disabled={loading}
-                            className={`w-full py-4 rounded-md text-xl font-semibold transition-colors text-white ${loading
-                                ? "bg-orange-300 cursor-not-allowed"
-                                : "btn py-6 bg-orange-500 hover:bg-orange-600"
-                                }`}
-                        >
-                            {loading ? "Creating Account..." : "Sign Up"}
-                        </button>
+                    <button
+                        type="submit"
+                        className={`w-full py-3 mt-3 rounded-xl text-lg font-semibold text-white transition-colors ${loading ? "bg-orange-300 cursor-not-allowed" : "bg-orange-500 hover:bg-orange-600"
+                            }`}
+                        disabled={loading}
+                    >
+                        {loading ? "Creating Account..." : "Sign Up"}
+                    </button>
 
-                        <div className="flex items-center gap-4 mt-2">
-                            <hr className="flex-grow border-t border-orange-300" />
-                            <p className="text-orange-300 text-sm">or</p>
-                            <hr className="flex-grow border-t border-orange-300" />
-                        </div>
+                    <div className="flex items-center gap-4 mt-2">
+                        <hr className="flex-grow border-green-300" />
+                        <p className="text-green-500 text-sm font-semibold">or</p>
+                        <hr className="flex-grow border-green-300" />
+                    </div>
 
-                        <div className="mt-4 flex items-center justify-center">
-                            <button
-                                type="button"
-                                onClick={handleGoogleLogin}
-                                className="flex items-center gap-2 bg-white border border-orange-300 px-5 py-6 rounded-md shadow-md hover:shadow-lg transition-shadow text-lg w-full text-black btn font-semibold"
-                                disabled={loading}
-                            >
-                                <FcGoogle className="text-2xl" />
-                                <span>Continue with Google</span>
-                            </button>
-                        </div>
-                    </form>
-                </div>
+                    <button
+                        type="button"
+                        onClick={handleGoogleLogin}
+                        className="flex items-center justify-center gap-3 w-full py-3  rounded-xl bg-white border border-orange-300 text-black font-semibold shadow-md hover:shadow-lg transition-shadow"
+                        disabled={loading}
+                    >
+                        <FcGoogle className="text-2xl" /> Continue with Google
+                    </button>
 
-                <p className="text-sm text-center text-orange-300 mt-6">
-                    Already have an account?{" "}
-                    <Link to="/login" className="text-orange-500 font-semibold hover:underline">
-                        Login
-                    </Link>
-                </p>
+                    <p className="text-center mt-4 text-green-700">
+                        Already have an account?{" "}
+                        <Link to="/login" className="text-orange-500 font-semibold hover:underline">
+                            Login
+                        </Link>
+                    </p>
+                </motion.form>
             </div>
         </div>
     );
