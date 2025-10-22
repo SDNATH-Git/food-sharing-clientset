@@ -4,6 +4,7 @@ import HowItWorks from '../components/HowItWorks';
 import Testimonials from '../components/Testimonials';
 import FeaturedFoods from '../Pages/FeaturedFoods/FeaturedFoods';
 import FoodHeroesSection from '../components/FoodHeroesSection';
+import TestimonialSection from '../components/TestimonialSection';
 
 
 const Home = () => {
@@ -14,6 +15,7 @@ const Home = () => {
             <Testimonials></Testimonials>
             <HowItWorks></HowItWorks>
             <FoodHeroesSection></FoodHeroesSection>
+            <TestimonialSection></TestimonialSection>
 
         </div>
     );

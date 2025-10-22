@@ -40,7 +40,7 @@ const Loder = () => {
                         />
                         <motion.div
                             className="absolute inset-2 rounded-full border-4 border-transparent"
-                            style={{ borderBottomColor: "black" }}
+                            style={{ borderBottomColor: "green" }}
                             animate={{ rotate: -360 }}
                             transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
                         />
