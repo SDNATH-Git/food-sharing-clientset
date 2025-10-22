@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+import { StrictMode, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import './index.css'
 import { RouterProvider } from "react-router";
@@ -7,10 +7,11 @@ import AuthProvider from "./Provider/AuthProvider";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Loder from "./components/Loder";
+import { motion, AnimatePresence } from 'framer-motion';
 
 //Loader contion
 function App() {
-  const [isLoading, setIsLoading] = useState(true);  // ✅ state এর নাম আলাদা
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 2000);
@@ -51,7 +52,8 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <RouterProvider router={router} />
+        {/* <RouterProvider router={router} /> */}
+        <App></App>
       </AuthProvider>
     </QueryClientProvider>
   </StrictMode>

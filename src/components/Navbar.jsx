@@ -70,8 +70,7 @@ const Navbar = () => {
             </NavLink>
         ));
 
-    // শর্ত: হোম পেজে আছি এবং স্ক্রোল হয়নি (isSticky=false)
-    // তখন gradient, অন্যথায় সাদা ব্যাকগ্রাউন্ড
+ 
     const headerBgClass =
         location.pathname === "/" && !isSticky
             ? "bg-gradient-to-r from-green-100 via-white to-orange-100"
