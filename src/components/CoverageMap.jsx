@@ -16,7 +16,7 @@ const CoverageMap = () => {
     ];
 
     return (
-        <div className="my-12 px-5 md:px-10 z-0">
+        <div className="my-12 px-5 md:px-10 ">
             <h2 className="text-3xl font-bold text-center mb-6">
                 🌍 Coverage & Active Food Areas
             </h2>
